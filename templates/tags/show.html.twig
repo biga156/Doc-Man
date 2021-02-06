@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tags{% endblock %}
+
+{% block body %}
+    <h1>Documents list of {{ tag.label }}</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Documents</th>
+                
+                {# NOTE: aria descriptions:#}
+		            <div id="doc_link-hint" aria-hidden="false" hidden="true">Click to view this document</div>
+	            {# end of aria descriptions#}
+
+
+                <td>
+                {% for document in documents %}
+                {% if document.protection== false or document.user==app.user %}
+                    <a href="{{path('documents_show',{id:document.id})}}" aria-describedBy="doc_link-hint"><abbr title="Click to view the document">{{ document.label }}</abbr></a><br>
+                {% endif %}
+                {% endfor %}
+                </td>    
+                
+                
+            </tr>
+           
+        </tbody>
+    </table>
+
+    <a href="{{ path('tags_index') }}">back to list</a>
+
+    
+
+   
+{% endblock %}

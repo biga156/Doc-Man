@@ -1,0 +1,68 @@
+<diagram program="umletino" version="14.4.0-SNAPSHOT"><zoom_level>10</zoom_level><help_text>Space for diagram notes</help_text><element><id>UMLClass</id><coordinates><x>370</x><y>370</y><w>210</w><h>320</h></coordinates><panel_attributes>Documents
+{Some Properties}
+--
+- id: int_auto
+- createdAt: datetime 
+- label: string (not null)
+- note: text (nullable)
+- protection: bool
+- validity: date (nullable)
+- alarm: datetime (nullable)
+-audio_note :string (nullable)
+--
+&lt;&lt;relations&gt;&gt;
+- file (1,n) -&gt; OneToMany
+- user (n,1) -&gt; ManyToOne
+- tag (n,n) -&gt; ManyToMany
+--
+CRUD (for user of doc)
+Read (for all user - public)
+CRUD (for admin - public)
+Delete (for admin - private)</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>380</x><y>0</y><w>200</w><h>210</h></coordinates><panel_attributes>Users
+--
+- id: int_aut
+- createdAt
+-userName: string (not null)
+- password: hash (not null)
+- email: string (nullable)
+- firstName: string (nullable)
+- lastName: string (nullable)
+- birth: date (nullable)
+--
+&lt;&lt;relations&gt;&gt;
+- documents (1,n)
+--
+CRUD (for admins)</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>700</x><y>360</y><w>160</w><h>190</h></coordinates><panel_attributes>Files
+--
+- id: int_aut
+- name: string (not null)
+- path: string (not null)
+- extension: string (not null)
+- sze: double (not null)
+- type: string (nullable)
+- description string (nullable)
+--
+&lt;&lt;relations&gt;&gt;
+- documents (n,1)
+--
+CRUD</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>70</x><y>400</y><w>160</w><h>150</h></coordinates><panel_attributes>Tags
+--
+- id: int_aut
+- label
+--
+&lt;&lt;relations&gt;&gt;
+- documents (n,n)
+--
+CR (all user)
+CRUD (admin)</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>220</x><y>450</y><w>170</w><h>60</h></coordinates><panel_attributes>lt=-
+m1=*
+m2=*
+connect to &gt;
+ManyToMany
+</panel_attributes><additional_attributes>10;20;150;20</additional_attributes></element><element><id>Relation</id><coordinates><x>480</x><y>200</y><w>100</w><h>190</h></coordinates><panel_attributes>lt=-
+m1=1
+m2=*
+belongs to &gt;</panel_attributes><additional_attributes>10;10;10;170</additional_attributes></element><element><id>Relation</id><coordinates><x>570</x><y>420</y><w>150</w><h>50</h></coordinates><panel_attributes>lt=-
+m1=1
+m2=*
+contain &gt;</panel_attributes><additional_attributes>10;20;130;20</additional_attributes></element></diagram>

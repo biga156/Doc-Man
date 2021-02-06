@@ -1,0 +1,33 @@
+{% if is_granted('ROLE_USER') %}
+
+	{{ form_start(form) }}
+		{% block stylesheet %}
+		<link href="{{asset('/js/dictaphone/styles/app.css')}}" rel="stylesheet" type="text/css">#}
+		
+		{% endblock %}
+	{{ form_rest(form) }}
+	
+	{{ form_widget(form) }}
+	
+	{% include "documents/_dictaphone_buttons.html.twig" %}
+  	<br><p><button class="btn" data-button onclick="location.href='{{ path('documents_new') }}'" data-token="{{ csrf_token('get') }}">{{ button_label|default('Save and add files') }}</button></p>
+  	
+
+	{{ form_end(form) }}
+	{% block javascript  %}
+<script src = "{{asset('/js/dictaphone/scripts/app.js')}}"></script>
+{% endblock %}
+{% else %}
+	{{ form_start(form) }}
+
+
+	{{ form_widget(form) }}
+
+	<br><p><button class="btn">{{ button_label|default('Save and add files') }}</button></p>
+
+	{{ form_end(form) }}
+{% endif %}
+
+{% block javascripts %}
+	
+{% endblock %}

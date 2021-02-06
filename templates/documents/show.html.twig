@@ -1,0 +1,128 @@
+{% extends 'base.html.twig' %}
+{% block title %}
+
+	{#This is important for screen readers#}
+	Details of document:
+	{{ document.label }}
+{% endblock %}
+
+{% block body %}
+	{#Navigation's bar#}
+	<table class="table">
+		<th>
+
+			<a href="{{ path('documents_index',{'u':app.user.id}) }}">Documents/</a>
+			{{ document.label  }}
+		</th>
+		<td>
+			Id:
+			{{document.id}}
+		</td>
+	</table>
+	{#Document's name#}
+	<h1>
+		{{ document.label  }}
+	</h1>
+	{# NOTE: aria descriptions:#}
+		<div id="tag_link-hint" aria-hidden="false" hidden="true">Click to view all documents in this tag</div>
+	{# end of aria descriptions#}
+	<table class="table">
+		<tbody>
+			<tr>
+				<th>
+					Files
+				</th>
+				<td>
+					
+					<a href="{{ path('files_index',{doc:document.id}) }}">View the files ({{document.files | length}} files)</a>
+					
+				</td>
+			</tr>
+			<tr>
+				<th>
+					Tags
+				</th>
+				<td>
+				{% for tag in document.tags %}
+					<a href="{{path('tags_show', {id:tag.id})}}" aria-describedBy="tag_link-hint"><abbr title="See all documents in this tag">{{tag.label}}</abbr></a><br>
+				{% endfor %}
+				
+				</td>
+			</tr>
+			<tr>
+				<th>
+					Note
+				</th>
+				<td>
+					{{ document.note }}
+				</td>
+			</tr>
+			<tr>
+				<th>
+					Protection
+				</th>
+				<td>
+					{{ document.protection ? 'Yes' : 'No' }}
+				</td>
+			</tr>
+			<tr>
+				<th>
+					Validity
+				</th>
+				<td>
+					{{ document.validity ? document.validity|date('Y-m-d') : '' }}
+				</td>
+			</tr>
+			<tr>
+				<th>
+					Alarm
+				</th>
+				<td>
+					{{ document.alarm ? document.alarm|date('Y-m-d H:i:s') : '' }}
+				</td>
+			</tr>
+			<tr>
+				<th>
+					AudioNote
+				</th>
+				<td>
+					{{ document.audioNote }}
+				</td>
+			</tr>
+
+			<th>
+				CreatedAt
+			</th>
+			<td>
+				{{ document.createdAt ? document.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+		</tbody>
+	</tr>
+	{% if is_granted('ROLE_ADMIN') %}
+		{# *the owner of the document #}
+		<tr>
+			<th>
+				Owner
+			</th>
+			{% if document.user %}
+				<td>
+					{{ document.user.username }}
+				</td>
+			{% else %}
+				<td>
+					DISABLED USER
+				</td>
+			{% endif %}
+		</tr>
+	{% endif %}
+</tbody>
+</table>
+{% if document.user==app.user or is_granted('ROLE_ADMIN')%}
+<button class="btn btn-link"><a href="{{ path( 'documents_edit', { id: document.id } ) }}">Edit documents properties </a></button>
+ or
+ <button class="btn btn-link"><a href="{{ path('files_new', { doc:document.id}) }}">Add new file </a></button>
+
+
+
+{{ include('documents/_delete_form.html.twig') }}
+{% endif %}
+{% endblock %}

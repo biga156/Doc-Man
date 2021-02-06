@@ -1,0 +1,5 @@
+<br><form method="post" action="{{ path('users_delete', {'id': user.id}) }}" onsubmit="return confirm('Are you sure you want to delete this user? Attention! This action deletes all documents and files of this user and the deletion is irreversible. ');">
+    <input type="hidden" name="_method" value="DELETE">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
+    <button class="btn btn-danger">Delete</button>
+</form>

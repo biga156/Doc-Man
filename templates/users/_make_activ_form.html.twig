@@ -1,0 +1,5 @@
+<form method="post" action="{{ path('users_make_activ', {'id': user.id}) }}" onsubmit="return confirm('Are you sure you want to enable this user?');">
+    <input type="hidden" name="_method" value="ENABLE">
+    <input type="hidden" name="_token" value="{{ csrf_token('enable' ~ user.id) }}">
+    <button class="btn btn-primary">Enable</button>
+</form>

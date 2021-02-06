@@ -1,0 +1,100 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  Welcome in my document manager!
+{% endblock %}
+
+{% block body %}
+  <style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font:
+    18px/1.5 sans-serif; } .example-wrapper code { background: #F5F5F5; padding:
+    2px 6px; }
+  </style>
+
+  <div class="example-wrapper">
+   <h2>Attention!</h2>
+      <p>The site is currently in beta and is constantly being developed.
+      Errors can happen all the time, but I try to leave them operational after work :)</p>
+     
+  
+    {% if app.user %}
+
+      <h1>
+        Welcome {{ app.user.firstname }}! ✅
+      </h1>
+      <p>
+    
+        you are logged in as 
+         {# loop the roles #}
+             {% for role in app. user.roles %}
+                  {% if role == "ROLE_USER" %}
+                         User
+                                              <div>
+                       Your options in the site:
+                       <ul>
+                        <li> You can manage your accounts in the main menu->My profil</li>
+                        <li> You can create, read, edit or delete your documents in the main menu->Documents->My documents</li>
+                        <li> You can read all public documents in the main menu->Documents->All public documents</li>
+                        <li> You can upload or download files for your documents</li>
+                        <li> You can download files from the public documents</li>
+                        <li> You can set alerts for your documents</li>
+                       </ul>
+                       </div>
+                  {% elseif role == "ROLE_USER_TEMP" %}
+                      Non verified user
+                      <div>
+                      Only users who have been verified by the administrator will have access to our public documents on our site.
+                      </div>
+                      <div>
+                      <p>The administrator will soon handle your registration. If this doesn't happen within 48 days and you don't get any other notifications during this time, please <a href="#">send us a message.</a></p>
+                      In the meantime, you can choose from the following options:
+                       <ul>
+                        <li> You can manage your accounts in the main menu->My profil</li>
+                        <li> You can create, read and edit your documents in the main menu->Documents->My documents</li>
+                        <li> You can upload or download files for your documents</li>
+
+                       </ul>
+                       <p>Attention!</p>
+                       <p>Please note, however, if your registration is rejected, we may delete all data you have uploaded so far.</p>
+                      </div>
+                      
+                  {% elseif role == "ROLE_ADMIN" %}
+                      Administrator
+                       <div>
+                       Your options in the site:
+                       <div>
+                       <p>As user:</p>
+                       <ul>
+                        <li> You can manage your accounts in the main menu->My profil</li>
+                        <li> You can create, read, edit or delete your documents in the main menu->Documents->My documents</li>
+                        <li> You can read all public documents in the main menu->Documents->All public documents</li>
+                        <li> You can upload or download files for your documents</li>
+                        <li> You can download files from the public documents</li>
+                        <li> You can set alerts for your documents</li>
+                       </ul>
+                       </div>
+                       <p>As Administrator:</p>
+                        <ul>
+                          <li> You can manage all user accounts, including: create, update, delete or change the rights of access </li>
+                          <li> You can manage all public documents and files, including: create, update, delete.</li>
+                          <li> You can manage the list of tags, including: create, update, delete.</li>
+                          
+                        </ul>
+                       </div>
+                  {% endif %}
+           {% endfor %}
+      </p>
+    {% else %}
+     <h1>
+        Hello visitor! ✅
+      </h1>
+      <p>
+        You must log in to use our site!
+      </p>
+      <div>
+        What is this?
+        (Description)
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}

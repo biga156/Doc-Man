@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Files
+{% endblock %}
+
+{% block body %}
+	<h1>Create new Files</h1>
+
+	{{ include('files/_form.html.twig') }}
+
+	<a href="{{ path('files_index', {'doc':doc}) }}">back to list</a>
+{% endblock %}
+{% block javascript %}
+	<script>
+		const fileSelector = document.getElementById('file-selector');
+fileSelector.addEventListener('change', (event) => {
+const fileList = event.target.files;
+console.log(fileList);
+});
+	</script>
+{% endblock %}

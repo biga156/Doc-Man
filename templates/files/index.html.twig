@@ -1,0 +1,161 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Files index
+{% endblock %}
+
+{% block body %}
+
+	{% if document %}
+		{# Note: Navigation's bar - you can't see it in admin mode #}
+		<table class="table">
+			<th>
+				<a href="{{ path('documents_index',{'u':app.user.id}) }}">Documents/</a>
+				<a href="{{ path('documents_show',{id:doc}) }}">{{document.label}}</a>
+			</th>
+		</table>
+	{% endif %}
+	{% if doc != 0 %}
+		{# Note:When you use the file list as user (documents->file list)#}
+		<h1>Files of
+			{{document.label}}</h1>
+	{% else %}
+		{# Note: admin mode, list of all files in the files menu #}
+		<h1>List of files</h1>
+	{% endif %}
+<br>
+	{% if doc != 0 %}
+		<button class="btn btn-primary"><a href="{{ path('files_new', {doc:doc}) }}">Add new</a></button>
+		
+	{% else %}
+		<button class="btn btn-primary">
+			<a href="{{ path('files_new') }}">Add new</a></button><br>
+		
+	{% endif %}
+	{# NOTE:aria descriptions: #}<div id="orderby-hint" aria-hidden="false" hidden="true"> Click to reorder</div>
+	<div id="select_filter-hint" aria-hidden="false" hidden="true">Choose from the options</div>
+	<div id="toggle_column-hint" aria-hidden="false" hidden="true">Click to enable or disable this column</div>
+	{# NOTE:end of aria descriptions: #}
+		<div>
+        <abbr title="Here you can enable or disable the columns">Toggle column:</abbr>
+		<button class="btn btn-link toggle-vis" data-column="0" aria-describedBy="toggle_column-hint">Name</button> -
+		<button class="btn btn-link toggle-vis" data-column="1" aria-describedBy="toggle_column-hint">Document</button> - 
+		<button class="btn btn-link toggle-vis" data-column="2" aria-describedBy="toggle_column-hint">Extension</button> - 
+		<button class="btn btn-link toggle-vis" data-column="3" aria-describedBy="toggle_column-hint">Size</button> - 
+		<button class="btn btn-link toggle-vis" data-column="4" aria-describedBy="toggle_column-hint">Type</button> - 
+	 </div>
+
+	<table class="table display" id="lstindex">
+		<thead>
+			<tr class="table-primary">
+
+				<th>
+					<abbr title="Click to reorder">Name</abbr><br>
+					<input type="text" id="lstindex0" placeholder="Filter By Name">
+				</th>
+				<th>
+					<abbr title="Click to reorder">Document</abbr><br>
+					<input type="text" id="lstindex1" placeholder="Filter By Document">
+				</th>
+				<th>
+					<abbr title="Click to reorder">Extension</abbr><br>
+					<input type="text" id="lstindex2" placeholder="Filter By Ext.">
+				</th>
+				<th>
+					<abbr title="Click to reorder">Size</abbr><br>
+					<input type="text" id="lstindex3" placeholder="Filter By Size">
+				</th>
+				<th>
+					<abbr title="Click to reorder">Type</abbr><br>
+					<select id="lstindex4" aria-describedby="select_filter-hint">
+						<option value="">All</option>
+						<option value="document">Document</option>
+						<option value="audio">Audio</option>
+					</select>
+				</th>
+				<th>actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for file in files %}
+				<tr>
+
+					<td>
+						<a href="{{ path('files_show', {'id': file.id}) }}">{{ file.name }}</a>
+					</td>
+					<td>
+						<a href="{{ path('documents_show', {'id': file.documents.id}) }}">{{ file.documents }}</a>
+					</td>
+					{% if file.extension== "application/pdf" %}
+						<td>pdf</td>
+					{% elseif file.extension == "application/msword" or file.extension == "application/vnd.openxmlformats-officedocument.wordprocessingml.document" %}
+						<td>doc/docx</td>
+					{% elseif file.extension == "application/vnd.oasis.opendocument.text"%}
+						<td>Open Document Format</td>
+					{% else %}
+						<td>{{ file.extension }}</td>
+					{% endif %}
+
+					{% if (file.size/1024)>1024 %}
+						<td>{{ ((file.size/1024)/1024) | number_format(2)  }}
+							MB
+						</td>
+					{% else %}
+						<td>{{ (file.size/1024) | number_format(2)  }}
+							KB
+						</td>
+					{% endif %}
+					<td>{{ file.type }}</td>
+
+					<td>
+						{#<a href="{{ path('files_show', {'id': file.id}) }}">show</a>#}
+
+						{{ include('files/_delete_form.html.twig') }}
+
+					</td>
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="7">no records found</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+		
+		<tfoot>
+			<tr class="table-primary">
+				<th>
+					Name
+				</th>
+				<th>
+					Document
+				</th>
+				<th>
+					Extension
+				</th>
+				<th>
+					Size
+				</th>
+				<th>
+					Type
+				</th>
+				<th>actions</th>
+			</tr>
+		</tfoot>
+	
+	</table>
+		{% if doc != 0 %}
+		<button class="btn btn-primary"><a href="{{ path('files_new', {doc:doc}) }}">Add new</a></button>
+		
+	{% else %}
+		<button class="btn btn-primary">
+			<a href="{{ path('files_new') }}">Add new</a></button><br>
+		
+	{% endif %}
+
+{% endblock %}
+{% block javascripts %}
+	<script>{% include "_scripts/TableFilter.js" %}</script>
+	<script>{% include "_scripts/DataTables/jquery.dataTables.min.js" %}</script>
+	<script>{% include "_scripts/DataTables/dataTable.js" %}</script>
+
+
+{% endblock %}

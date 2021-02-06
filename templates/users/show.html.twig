@@ -1,0 +1,79 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Users
+{% endblock %}
+
+{% block body %}
+	<h1>{{user.username}}'s details:</h1>
+
+	<table class="table">
+		<tbody>
+			<tr>
+				<th>Id</th>
+				<td>{{ user.id }}</td>
+			</tr>
+			<tr>
+				<th>Username</th>
+				<td>{{ user.username }}</td>
+			</tr>
+			<tr>
+				<th>Roles</th>
+				{%if(user.roles==["ROLE_ADMIN"])%}
+					{#<td>{{ user.roles ? user.roles|json_encode : '' }}</td>#}
+					<td>Administrator</td>
+					{%else%}
+					<td>User</td>
+					{%endif%}</tr>
+			</tr>
+			<tr>
+				<th>Password</th>
+				{#<td>{{ user.password }}</td>#}
+				<td>********</td>
+			</tr>
+
+			<tr>
+				<th>Role</th>
+				<td>
+					{# loop the roles #}
+					{% for role in user.roles %}
+						{% if role == "ROLE_USER" %}
+							User
+						{% elseif role == "ROLE_USER_TEMP" %}
+							Non verified user
+						{% elseif role == "ROLE_ADMIN" %}
+							Administrator
+						{% endif %}
+					{% endfor %}
+				</td>
+			</tr>
+			<tr>
+				<th>CreatedAt</th>
+				<td>{{ user.createdAt ? user.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+			</tr>
+			<tr>
+				<th>Email</th>
+				<td>{{ user.email }}</td>
+			</tr>
+			<tr>
+				<th>FirstName</th>
+				<td>{{ user.firstName }}</td>
+			</tr>
+			<tr>
+				<th>LastName</th>
+				<td>{{ user.lastName }}</td>
+			</tr>
+			<tr>
+				<th>BirthDate</th>
+				<td>{{ user.birthDate ? user.birthDate|date('Y-m-d') : '' }}</td>
+			</tr>
+		</tbody>
+	</table>
+	<div>
+	<button class="btn btn-primary"><a href="{{ path('users_index') }}">back to list  </a></button>
+	<button class="btn btn-secondary"><a href="{{ path('users_edit_admin', {'id': user.id}) }}">  edit</a></button>
+	</div>
+	{% if(app.user.roles==["ROLE_ADMIN"] and user.roles!=["ROLE_ADMIN"]) %}
+		{#{{ include('users/_make_archiv_form.html.twig') }}#}	
+		{{ include('users/_delete_form.html.twig') }}
+		{% endif %}
+	{% endblock %}

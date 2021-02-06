@@ -1,0 +1,173 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	Users List
+{% endblock %}
+
+{% block body %}
+	<h1>Users List</h1>
+	<br><button class="btn btn-primary">
+		<a href="{{ path('users_new') }}">Create new</a>
+	</button><br>
+	{# NOTE:aria descriptions: #}<div id="orderby-hint" aria-hidden="false" hidden="true"> Click to reorder</div>
+	<div id="select_filter-hint" aria-hidden="false" hidden="true">Choose from the options</div>
+	<div id="toggle_column-hint" aria-hidden="false" hidden="true">Click to enable or disable this column</div>
+	{# NOTE:end of aria descriptions: #}
+		<div>
+        <abbr title="Here you can enable or disable the columns">Toggle column:</abbr>
+		<button class="btn btn-link toggle-vis" data-column="0" aria-describedBy="toggle_column-hint">Username</button> -
+		<button class="btn btn-link toggle-vis" data-column="1" aria-describedBy="toggle_column-hint">Role</button> - 
+		<button class="btn btn-link toggle-vis" data-column="2" aria-describedBy="toggle_column-hint">Created</button> - 
+		<button class="btn btn-link toggle-vis" data-column="3" aria-describedBy="toggle_column-hint">Email</button> - 
+		<button class="btn btn-link toggle-vis" data-column="4" aria-describedBy="toggle_column-hint">First name</button> - 
+		<button class="btn btn-link toggle-vis" data-column="4" aria-describedBy="toggle_column-hint">Last name</button> - 
+		<button class="btn btn-link toggle-vis" data-column="4" aria-describedBy="toggle_column-hint">Birh date</button> - 
+	 </div>
+
+	<table class="table table-hover display" id="lstindex">
+		<thead>
+			<tr class="table-primary">
+				<th scope="row">
+					<abbr title="Click to reorder">Username</abbr><br>
+					<input type="text" id="lstindex0" placeholder="Filter By Username">
+				</th>
+				<th scope="row">
+					<abbr title="Click to reorder">Roles</abbr><br>
+					<select id="lstindex1">
+						<option></option>
+						<option>User</option>
+						<option>Administrator</option>
+						<option>Non verified user</option>
+					</select>
+				</th>
+				<th scope="row">
+					<abbr title="Click to reorder">Created</abbr><br>
+					<input type="text" id="lstindex2" placeholder="Filter By Created">
+				</th>
+				<th scope="row">
+					<abbr title="Click to reorder">Email</abbr><br>
+					<input type="text" id="lstindex3" placeholder="Filter By Email">
+				</th>
+				<th scope="row">
+					<abbr title="Click to reorder">First name</abbr><br>
+					<input type="text" id="lstindex4" placeholder="Filter By First name">
+				</th>
+				<th scope="row">
+					<abbr title="Click to reorder">Last name</abbr><br>
+					<input type="text" id="lstindex5" placeholder="Filter By Last name">
+				</th>
+				<th scope="row">
+					<abbr title="Click to reorder">Birth date</abbr><br>
+					<input type="text" id="lstindex6" placeholder="Filter By Birth date">
+				</th>
+				<th scope="row">
+					<abbr title="Click to reorder">actions</abbr><br>
+					<select id="lstindex7">
+						<option></option>
+						<option value="Enable">Disabled</option>
+						<option value="Disable">Enabled</option>
+
+					</select>
+
+				</th>
+			</tr>
+		</thead>
+		<div id="orderby-hint" aria-hidden="false" hidden="true">Click to reorder</div>
+		<tbody>
+			{% for user in users %}
+				<tr>
+
+					<td>
+						<a href="{{ path('users_show', {'id': user.id}) }}">{{ user.username }}</a>
+					</td>
+					{#<td>{{ user.roles ? user.roles|json_encode : '' }}</td>#}
+
+					{# loop the roles #}
+					{% for role in user.roles %}
+						{% if role == "ROLE_USER" %}
+							<td>
+								<a href="{{ path('users_edit_admin', {'id': user.id}) }}">User</a>
+							</td>
+						{% elseif role == "ROLE_USER_TEMP" %}
+							<td>
+								<a href="{{ path('users_edit_admin', {'id': user.id}) }}">Non verified user</a>
+							</td>
+						{% elseif role == "ROLE_ADMIN" %}
+							<td>
+								<a href="{{ path('users_edit_admin', {'id': user.id}) }}">Administrator</a>
+							</td>
+						{% elseif role == "ROLE_USER_DELETED" %}
+							<td>
+								<a href="{{ path('users_edit_admin', {'id': user.id}) }}">Inactiv user</a>
+							</td>
+						{% endif %}
+					{% endfor %}
+
+
+					<td>{{ user.createdAt ? user.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+					<td>
+
+						<a href="#">{{ user.email }}</a>
+					</td>
+					<td>{{ user.firstName }}</td>
+					<td>{{ user.lastName }}</td>
+					<td>{{ user.birthDate ? user.birthDate|date('Y-m-d') : '' }}</td>
+					{% for role in user.roles %}
+						{% if role=="ROLE_USER_DELETED" %}
+							<td>
+								{{ include('users/_make_activ_form.html.twig') }}
+							</td>
+						{% else %}
+							<td>
+								{{ include('users/_make_archiv_form.html.twig') }}
+							</td>
+						{% endif %}
+					{% endfor %}
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="10">no records found</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+		
+<tfoot>
+			<tr class="table-primary">
+				<th scope="row">
+					Username
+				</th>
+				<th scope="row">
+					Roles
+				</th>
+				<th scope="row">
+					Created
+				</th>
+				<th scope="row">
+					Email
+				</th>
+				<th scope="row">
+					First name
+				</th>
+				<th scope="row">
+					Last name
+				</th>
+				<th scope="row">
+					Birth date
+				</th>
+				<th scope="row">
+					actions
+				</th>
+			</tr>
+		</tfoot>
+	
+	</table>
+
+	<br><button class="btn btn-primary">
+		<a href="{{ path('users_new') }}">Create new</a>
+	</button>
+{% endblock %}
+{% block javascripts %}
+	<script>{% include "_scripts/TableFilter.js" %}</script>
+	<script>{% include "_scripts/DataTables/jquery.dataTables.min.js" %}</script>
+	<script>{% include "_scripts/DataTables/dataTable.js" %}</script>
+{% endblock %}

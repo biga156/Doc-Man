@@ -1,0 +1,83 @@
+{% if is_granted("ROLE_ADMIN") %}
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<a class="navbar-brand" href="{{path('home')}}">Symfony Docman Administrator v0.25</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+	{% elseif is_granted("ROLE_USER") %}
+
+		<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+			<a class="navbar-brand" href="{{path('home')}}">Symfony Docman v0.25</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+		{% else %}
+			<nav class="navbar navbar-expand-lg navbar-light bg-light">
+				<a class="navbar-brand" href="{{path('home')}}">Symfony Docman v0.25</a>
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+			{% endif %}
+			<div class="collapse navbar-collapse" id="navbarColor01">
+				<ul class="navbar-nav mr-auto">
+					{% if app.user %}
+						<li class="nav-item dropdown">
+							<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="{{path('documents_index', {'u': app.user})}}" role="button" aria-haspopup="true" aria-expanded="false">Documents</a>
+							<div class="dropdown-menu">
+								<a class="dropdown-item" href="{{path('documents_index', {'u':app.user.id})}}">My documents</a>
+								{% if is_granted("ROLE_USER") %}
+
+
+									<a class="dropdown-item" href="{{path('documents_public')}}">All public documents</a>
+								{% endif %}
+								<div class="dropdown-divider"></div>
+								<a class="dropdown-item" href="{{path('documents_new')}}">Create a new document</a>
+							</div>
+						</li>
+
+						{% if app.user.roles == ['ROLE_ADMIN'] %}
+							<li class="nav-item">
+								<a class="nav-link" href="{{ path('files_index') }}">Files</a>
+							</li>
+
+							<li class="nav-item">
+								<a class="nav-link" href="{{ path('tags_index') }}">Tags</a>
+							</li>
+
+							<li class="nav-item">
+								<a class="nav-link" href="{{ path('users_index') }}">Users</a>
+							</li>
+						{% endif %}
+					</ul>
+						{#<input type="text" id="searchAll"  onkeyup="searchAll()" placeholder="Search in the page">#}
+						{#<form class="form-inline my-2 my-lg-0">
+						<input type="text" id="search" onkeyup="searchName()" placeholder="Search" >
+										{#	<input class="form-control mr-sm-2" type="text" placeholder="Search"/>
+											<button class="btn btn-secondary my-2 my-sm-0" type="submit">
+												Search
+											</button>
+										</form>#}
+
+				{% endif %}
+
+			</div>
+
+			<div class="collapse navbar-collapse" id="navbarSupportedContent"></div>
+			<ul class="nav navbar-nav navbar-right">
+				{% if app.user %}
+					<li>
+						<a class="nav-link" href="{{ path('users_edit',{'id':app.user.id}) }}"><abbr title="Here you can edit your profil">My profil</abbr></a>
+					</li>
+					<li>
+						<a class="nav-link" href="{{ path('app_logout') }}">Logout</a>
+					</li>
+				{% else %}
+					<li>
+						<a class="nav-link" href="{{ path('app_login') }}">Login</a>
+					</li>
+					<li>
+						<a class="nav-link" href="{{ path('registration') }}">Register</a>
+					</li>
+				{% endif %}
+			</ul>
+		</nav>

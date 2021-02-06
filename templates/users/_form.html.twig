@@ -1,0 +1,23 @@
+{#NOTE: form for admins (edit/create users)#}
+{% if app.request.attributes.get("_route") == "users_edit_admin" or app.request.attributes.get("_route") == "users_new"%}
+	{{ form_start(form) }}
+	{{ form_widget(form) }}
+	<button class="btn">{{ button_label|default('Save') }}</button>
+	{{ form_end(form) }}
+
+{# NOTE: user's form for edit (myProfil) #}
+{% elseif app.request.attributes.get("_route") == "users_edit"%}
+	{{ form_start(form) }}
+	{% do form.roles.setRendered() %}
+	{{ form_widget(form) }}
+	<button class="btn">{{ button_label|default('Save') }}</button>
+	{{ form_end(form) }}
+
+{# NOTE: Registration #}
+{% elseif app.request.attributes.get("_route") == "registration" %}
+	{{ form_start(form) }}
+
+	{{ form_widget(form) }}
+	<button class="btn">{{ button_label|default('Save') }}</button>
+	{{ form_end(form) }}
+{% endif %}

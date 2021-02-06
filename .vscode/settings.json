@@ -1,0 +1,31 @@
+{
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "default"
+            },
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 3306,
+            "driver": "MySQL",
+            "name": "docman",
+            "database": "document_db",
+            "username": "gabor",
+            "password": "gabor"
+        },
+        {
+            "mysqlOptions": {
+                "authProtocol": "default"
+            },
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 3306,
+            "driver": "MySQL",
+            "name": "docman_db",
+            "group": "docman_db",
+            "database": "docman_db",
+            "username": "gabor",
+            "password": "gabor"
+        }
+    ]
+}
